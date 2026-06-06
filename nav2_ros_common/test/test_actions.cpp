@@ -159,6 +159,7 @@ public:
   void TearDown()
   {
     stop_.store(true);
+    rclcpp::shutdown();
     if (server_thread_ && server_thread_->joinable()) {
       server_thread_->join();
       server_thread_.reset();
@@ -181,6 +182,7 @@ public:
     }
     node->on_term();
     node.reset();
+    std::this_thread::sleep_for(50ms);           //let DDS flush type deregistrations
   }
 
   std::shared_ptr<std::thread> server_thread_;
@@ -577,6 +579,5 @@ int main(int argc, char ** argv)
   ::testing::InitGoogleTest(&argc, argv);
   auto result = RUN_ALL_TESTS();
   g_rclcppfixture.TearDown();
-  rclcpp::shutdown();
   return result;
 }
