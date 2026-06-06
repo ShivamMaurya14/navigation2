@@ -584,24 +584,6 @@ _parameters:
     packages_skip_regex: ""
 
 workflows:
-  version: 2
-  build_and_test:
-    jobs:
-      - core_build:
-          <<: *core_build_parameters
-      - algorithm_build:
-          <<: *algorithm_build_parameters
-          requires:
-            - core_build
-      - system_build:
-          <<: *system_build_parameters
-          requires:
-            - algorithm_build
-      - release_test:
-          <<: *release_test_parameters
-          requires:
-            - system_build
-          cache_test: true
   nightly:
     jobs:
       - core_build:
